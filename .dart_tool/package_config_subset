@@ -1,7 +1,3 @@
-androidstudio
-2.7
-file:///D:/MobileApps/androidstudio/
-file:///D:/MobileApps/androidstudio/lib/
 async
 2.12
 file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.5.0/
@@ -90,4 +86,8 @@ flutter_test
 2.12
 file:///D:/flutter/packages/flutter_test/
 file:///D:/flutter/packages/flutter_test/lib/
+androidstudio
+2.7
+file:///D:/simplecalculator/
+file:///D:/simplecalculator/lib/
 2
