@@ -1,8 +1,28 @@
+import 'dart:convert';
+
+import 'package:androidstudio/sevices/database_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:sqflite/sqflite.dart';
 
-void main() => runApp(FirstApp());
+void insert(String a, String b, String c,String d,String e) async{
+  int i = await DatabaseHelper.instance.insert(
+      {
+        DatabaseHelper.columnFirst: a,
+        DatabaseHelper.columnOperation: b,
+        DatabaseHelper.columnSecond: c,
+        DatabaseHelper.columnResult: d,
+        DatabaseHelper.columnDate: e,
+      }
+  );
+}
+
+
+void main() {
+  runApp(FirstApp());
+
+}
 class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -57,7 +77,15 @@ class FirstApp extends StatelessWidget {
                     context,
                     MaterialPageRoute(builder: (context) => SecondApp()),
                   );}
-              )
+              ),
+              new ListTile(
+                  title: new Text("Calculation records"),
+                  leading: Icon(Icons.settings),
+                  onTap: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ThirdApp()),
+                  );}
+              ),
             ],
           ),
         ),
@@ -107,8 +135,19 @@ class SecondApp extends StatelessWidget {
               new ListTile(
                   title: new Text("Converter"),
                   leading: Icon(Icons.settings),
-                  onTap: (){}
-              )
+                  onTap: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SecondApp()),
+                  );}
+              ),
+              new ListTile(
+                  title: new Text("Calculation records"),
+                  leading: Icon(Icons.settings),
+                  onTap: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ThirdApp()),
+                  );}
+              ),
             ],
           ),
         ),
@@ -170,11 +209,16 @@ class _AddTwoNumbersState extends State<AddTwoNumbers> {
               RaisedButton(
                 child: Text("+"),
                 color: Colors.black26,
-                onPressed : () {
+                onPressed : ()
+                {
                   setState(() {
                     int result = int.parse(num1controller.text) + int.parse(num2controller.text);
                     resulttext = result.toString();
-                  });
+                  },
+                  );
+                  DateTime _now = DateTime.now();
+                  String timeStamp= 'timestamp: ${_now.month}.${_now.day}.${_now.year}, ${_now.hour}:${_now.minute}';
+                  insert(num1controller.text,"+",num2controller.text, resulttext,timeStamp);
                 },
               ),
               RaisedButton(
@@ -185,6 +229,9 @@ class _AddTwoNumbersState extends State<AddTwoNumbers> {
                     int result = int.parse(num1controller.text) - int.parse(num2controller.text);
                     resulttext = result.toString();
                   });
+                  DateTime _now = DateTime.now();
+                  String timeStamp= 'timestamp: ${_now.month}.${_now.day}.${_now.year}, ${_now.hour}:${_now.minute}';
+                  insert(num1controller.text,"-",num2controller.text, resulttext,timeStamp);
                 },
               ),
               RaisedButton(
@@ -195,6 +242,9 @@ class _AddTwoNumbersState extends State<AddTwoNumbers> {
                     int result = int.parse(num1controller.text) * int.parse(num2controller.text);
                     resulttext = result.toString();
                   });
+                  DateTime _now = DateTime.now();
+                  String timeStamp= 'timestamp: ${_now.month}.${_now.day}.${_now.year}, ${_now.hour}:${_now.minute}';
+                  insert(num1controller.text,"x",num2controller.text, resulttext,timeStamp);
                 },
               ),
               RaisedButton(
@@ -205,6 +255,9 @@ class _AddTwoNumbersState extends State<AddTwoNumbers> {
                     double result = double.parse(num1controller.text)/double.parse(num2controller.text);
                     resulttext = result.toStringAsPrecision(3);
                   });
+                  DateTime _now = DateTime.now();
+                  String timeStamp= 'timestamp: ${_now.month}.${_now.day}.${_now.year}, ${_now.hour}:${_now.minute}';
+                  insert(num1controller.text,"/",num2controller.text, resulttext,timeStamp);
                 },
               ),
             ],
@@ -221,6 +274,9 @@ class _AddTwoNumbersState extends State<AddTwoNumbers> {
                     double result =pow(double.parse(num1controller.text), double.parse(num2controller.text));
                     resulttext = result.toStringAsPrecision(3);
                   });
+                  DateTime _now = DateTime.now();
+                  String timeStamp= 'timestamp: ${_now.month}.${_now.day}.${_now.year}, ${_now.hour}:${_now.minute}';
+                  insert(num1controller.text,"^",num2controller.text, resulttext,timeStamp);
                 },
               ),
            ],
@@ -337,3 +393,109 @@ class _ConvertState extends State<Convert> {
   }
 }
 
+class ThirdApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final appTitle = 'Calculation records';
+    return new MaterialApp(
+      theme: ThemeData.dark().copyWith(brightness: Brightness.dark, accentColor: Colors.deepPurple),
+      home : Scaffold(
+        appBar: AppBar(
+          title: Text(appTitle),
+          backgroundColor: Colors.deepPurple,
+        ),
+        body: Records(),
+        drawer: Drawer(
+          child: new ListView(
+            children: <Widget>[
+              new DrawerHeader(
+                margin: EdgeInsets.zero,
+                padding: EdgeInsets.zero,
+                child: UserAccountsDrawerHeader (
+                  decoration: BoxDecoration(color: Colors.deepPurple),
+                  accountName: Text('Raul Pratap Singh'),
+                  accountEmail: Text("raulpsingh2@gmail.com"),
+                  currentAccountPicture: Container(
+                    decoration: BoxDecoration(
+                      image: new DecorationImage(
+                        image: new NetworkImage('https://sun1-14.userapi.com/s/v1/ig2/pWD9LqxaqpEWs70aigoeRGuwpG_kriwqgnQMQpoYTeqUX8iQE8PbWBCU7_OmyCcJWLPnoLX-zz51FSl5g0uzqWLg.jpg?size=400x0&quality=96&crop=30,0,855,855&ava=1'),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              new ListTile(
+                  title: new Text("Simple Calculator"),
+                  leading: Icon(Icons.account_box),
+                  onTap: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FirstApp()),
+                  );}
+              ),
+              new ListTile(
+                  title: new Text("Converter"),
+                  leading: Icon(Icons.settings),
+                  onTap: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SecondApp()),
+                  );}
+              ),
+            new ListTile(
+            title: new Text("Calculation records"),
+            leading: Icon(Icons.settings),
+            onTap: (){Navigator.push(
+              context,
+             MaterialPageRoute(builder: (context) => ThirdApp()),
+            );}
+            ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Records extends StatefulWidget {
+  @override
+  _RecordsState createState() => _RecordsState();
+}
+
+class _RecordsState extends State<Records> {
+  static var newArr="";
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child :Column(
+        children: <Widget>[
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Text("text",style: TextStyle(fontSize: 20, color: Colors.grey)),
+                FlatButton.icon(onPressed: () async{
+                  List<Map<String,dynamic>> queryRows = await DatabaseHelper.instance.queryAll();
+                  queryRows.join();
+                  var newArr= new List<Map<String,dynamic>>.from(queryRows);
+                  print(newArr.join(","));
+                  newArr.toString();
+                  return newArr;
+                }
+
+                , icon: Icon(Icons.swap_horiz),
+                    label: Text("Swap")),
+
+              ]
+          ),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Text(newArr)
+  ]
+          )
+        ],
+      ),
+    );
+  }
+}
