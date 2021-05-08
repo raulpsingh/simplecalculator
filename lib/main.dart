@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:androidstudio/sevices/database_service.dart';
+import 'package:androidstudio/database_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
